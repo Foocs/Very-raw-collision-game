@@ -15,7 +15,7 @@ namespace CollisionGame
         double speed = 1.3;
         double velX = 0, velY = 0;
         bool onG = false;
-        double grav = 0.5, friction = 0.95;
+        double grav = 0.3, friction = 0.9;
         Rectangle[] platforms = new Rectangle[50];
         Rectangle box;
         Random rnd = new Random();
@@ -30,7 +30,7 @@ namespace CollisionGame
                     case Keys.W:
                     case Keys.Up:
                     case Keys.Space:
-                        if (onG)
+                        if (onG)   
                             velY = -10;
                         break;
                     case Keys.A:
@@ -83,10 +83,22 @@ namespace CollisionGame
             box.Y += (int)velY;
 
             if (onG)
+            {
                 velX *= friction;
+                velY *= friction;
+            }
             else
+                if (velY < 18.5)
                 velY += grav;
 
+            if (box.Y + box.Height < 0)
+                box.Y = this.ClientRectangle.Height+box.Height;
+            if (box.Y - box.Height > this.ClientRectangle.Height)
+                box.Y = 0;
+            if (box.X + box.Height / 2 < 0)
+                box.X = this.ClientRectangle.Width + box.Width / 2;
+            if (box.X - box.Height / 2 > this.ClientRectangle.Width)
+                box.X = -box.Height / 2;
             onG = false;
 
             for (int i = 0; i < 50; i++)
@@ -114,7 +126,7 @@ namespace CollisionGame
         {
             InitializeComponent();
             for (int i = 0; i < 50; i++)
-                platforms[i] = new Rectangle(rnd.Next(this.ClientRectangle.Width), rnd.Next(this.ClientRectangle.Height), rnd.Next(30, 130), rnd.Next(20, 50));
+                platforms[i] = new Rectangle(rnd.Next(this.ClientRectangle.Width), rnd.Next(this.ClientRectangle.Height), rnd.Next(20, 130), rnd.Next(20, 50));
             box = new Rectangle(200, 200, 25, 25);
         }
     }
